@@ -5,7 +5,7 @@ The **Flick** App allows users to view videos and create new videos with a selfi
 The Video Overlay Creator App is designed to enhance video content by allowing users to overlay a selfie onto existing videos. This can be useful for creating personalized video messages, adding branding elements, or simply for fun and creative purposes.
 
 ## Screenshots
- <img src="https://github.com/pawannitt-26/Flicks/assets/133587112/054e2023-ab1d-4652-b36a-ef3036f6b486" width ='200'>&emsp;
+ <img src="https://github.com/pawannitt-26/Flicks/assets/133587112/fcd06be0-b728-40c3-b720-c5a7090f0c86" width ='200'>&emsp;
  
 ## Installation
 
