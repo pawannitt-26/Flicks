@@ -10,8 +10,10 @@ The Video Overlay Creator App is designed to enhance video content by allowing u
 ## Installation
 
 ## Steep 1: Clone the repository
-git clone [https://github.com/your_username/video-overlay-creator-app.git](https://github.com/pawannitt-26/Flicks/)
+```bash
+git clone https://github.com/pawannitt-26/Flicks
 cd flick/
+```
 
 ## Step 2: Install dependencies
 ```bash
