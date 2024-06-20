@@ -63,10 +63,10 @@ const flicks: FlickItem[] = [
   };
 
 
-function HomeScreen({ navigation }) {
+function HomeScreen() {
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F0E6', }}>
-            <Text style={{ color: "black", marginTop: 16, fontWeight: 500, fontSize: 20 }}>Flicks</Text>
+            <Text style={{ color: "black", marginTop: 16, fontWeight: 500, fontSize: 25 }}>Flick</Text>
             <CustomListview itemList={flicks} />
         </View>
     );

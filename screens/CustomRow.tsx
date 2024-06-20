@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ImageSourcePropType, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageSourcePropType, Alert, Platform, PermissionsAndroid } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Video from 'react-native-video';
 import { VideoPlayer, ProcessingManager } from 'react-native-video-processing';
@@ -19,7 +19,7 @@ interface CustomRowProps {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     padding: 10,
     marginLeft: 3,
     marginRight: 3,
@@ -67,9 +67,41 @@ const styles = StyleSheet.create({
 
 const CustomRow: React.FC<CustomRowProps> = ({ video_url, image_url, icon_url, video, photo, isPlaying, onPlay }) => {
 
+ 
+  const requestExternalStoragePermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        if (Platform.Version >= 30) {
+          const result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.MANAGE_EXTERNAL_STORAGE);
+          console.log('Manage external storage permission request result:', result);
+          return result === PermissionsAndroid.RESULTS.GRANTED;
+        } else {
+          const result = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+          console.log('Write external storage permission request result:', result);
+          return result === PermissionsAndroid.RESULTS.GRANTED;
+        }
+      } catch (error) {
+        console.error('Failed to request permission', error);
+        return false;
+      }
+    }
+    return false;
+  };
+
   const handleCreateVideo = async () => {
     try {
       const newPath = `${RNFS.DocumentDirectoryPath}/newVideo.mp4`;
+      let granted = false;
+
+      if (Platform.OS === 'android') {
+        granted = await requestExternalStoragePermission();
+        console.log('Storage permission granted:', granted);
+      }
+
+      if (!granted) {
+        Alert.alert('Permission Denied', 'Storage permission is required to save videos');
+        return;
+      }
 
       const result = await ProcessingManager.processVideo(video_url, {
         overlay: {
@@ -82,14 +114,10 @@ const CustomRow: React.FC<CustomRowProps> = ({ video_url, image_url, icon_url, v
         saveTo: 'file',
       });
 
-      const granted = await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
+      console.log('Processing result:', result);
 
-      if (granted === RESULTS.GRANTED) {
-        await RNFS.moveFile(result, newPath);
-        Alert.alert('Success', 'Video saved to gallery');
-      } else {
-        Alert.alert('Permission Denied', 'Storage permission is required to save videos');
-      }
+      await RNFS.moveFile(result, newPath);
+      Alert.alert('Success', 'Video saved to gallery');
     } catch (error) {
       console.error('Error processing video:', error);
       Alert.alert('Error', 'Failed to create video');
